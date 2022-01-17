@@ -1,3 +1,7 @@
+# Script that retrieves Positive COVID Cases from RIT COVID Dashboard: https://www.rit.edu/ready/spring-2022-dashboard
+# Made by Maksim Pikovskiy
+# pikmak2001@gmail.com
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -7,11 +11,20 @@ import pandas
 import numpy
 import matplotlib.pyplot as plt
 
+__author__ = "Maksim Pikovskiy"
+__email__ = "pikmak2001@gmail.com"
+__version__ = "1.0.0"
+__copyright__ = "Copyright 2022"
+__status__ = "Production"
+
+
+# General Variable for the Program
 URL = 'https://www.rit.edu/ready/spring-2022-dashboard'
 PATH = 'website_screenshots'
 DATA_PATH = 'data'
 
 
+# Creates graphs using generated CSV file
 def create_graph():
     df = pandas.read_csv(DATA_PATH + '\\' + 'covid_cases.csv')
 
@@ -64,6 +77,7 @@ def create_graph():
     plt.savefig(DATA_PATH + '\\' + 'covid_cases_graph.png', dpi=900)
 
 
+# Appends data to existing CSV file
 def save_data(students, employees):
     data = {
         'Students': [students],
@@ -76,6 +90,7 @@ def save_data(students, employees):
     df.to_csv(DATA_PATH + '\\' + 'covid_cases.csv', mode='a', index=False, header=False)
 
 
+# Saves screenshot of data on RIT COVID Dashboard
 def save_screenshot(driver):
     total_files = 0
     for base, dirs, files in os.walk(PATH):
@@ -90,7 +105,15 @@ def save_screenshot(driver):
     driver.save_screenshot(PATH + '\\' + 'screenshot' + (str(total_files + 1)) + '.png')
 
 
+# Main body of the program, which initiates the web driver and gets the data from the RIT COVID Dashboard.
+# Calls on other methods to generate data.
 def main() -> None:
+    print(__author__)
+    print(__email__)
+    print(__version__)
+    print(__copyright__)
+    print(__status__)
+
     s = Service(ChromeDriverManager().install())
 
     options = webdriver.ChromeOptions()
