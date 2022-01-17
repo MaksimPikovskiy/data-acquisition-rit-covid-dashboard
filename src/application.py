@@ -2,7 +2,25 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
+import os
 import pandas
+
+URL = 'https://www.rit.edu/ready/spring-2022-dashboard'
+PATH = 'D:\PyCharm Projects\data-acquisition-rit-covid-dashboard\website_screenshots'
+
+
+def save_screenshot(driver):
+    total_files = 0
+    for base, dirs, files in os.walk(PATH):
+        for Files in files:
+            total_files += 1
+
+    driver.maximize_window()
+    scheight = .1
+    while scheight < 5.4:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight/%s);" % scheight)
+        scheight += .01
+    driver.save_screenshot(PATH + "\\" + "screenshot" + (str(total_files + 1)) +".png")
 
 
 def main() -> None:
@@ -12,9 +30,8 @@ def main() -> None:
     options.add_argument('headless')
     options.add_argument('window-size=1920x1080')
 
-    url = 'https://www.rit.edu/ready/spring-2022-dashboard'
     driver = webdriver.Chrome(service=s, options=options)
-    driver.get(url)
+    driver.get(URL)
 
     content = driver.page_source
 
@@ -29,6 +46,8 @@ def main() -> None:
 
     print(current_cases_students)
     print(current_cases_employees)
+
+    save_screenshot(driver)
 
     driver.close()
     driver.quit()
