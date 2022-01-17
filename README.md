@@ -1,4 +1,4 @@
-# data-acquisition-rit-covid-dashboard
+# Data acquisition Rit COVID Dashboard
 This is script that pulls data from RIT COVID-19 dashboard, such as positive cases for Students and Employees, and creates 
 a graph with trend line. Moreover, it collects the data in the CSV file and captures screenshots of the data on the website.
 ___
