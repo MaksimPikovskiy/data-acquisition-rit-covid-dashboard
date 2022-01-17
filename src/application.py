@@ -1,31 +1,32 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import pandas
 
 
-def main():
+def main() -> None:
+
+    s = Service(ChromeDriverManager().install())
     url = 'https://www.rit.edu/ready/spring-2022-dashboard'
-    driver = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver")
+    driver = webdriver.Chrome(service=s)
     driver.get(url)
 
-    casesStudents = []
-    casesEmployees = []
-    casesStudents.append(0)
-    casesEmployees.append(0)
-    print(*casesEmployees)
-
     content = driver.page_source
-    soup = BeautifulSoup(content)
 
-    current_cases_students = soup.find_element(webdriver.XPATH,
-                                                 '/html/body/div[3]/main/div[2]/div[3]/div[3]/div/div/div/div[2]/div/div[4]/div/div/div/div/div[1]/div/p')
+    soup = BeautifulSoup(content, "html.parser")
+    body = soup.body
 
-    current_cases_employees = soup.find_element(webdriver.XPATH,
-                                                  '/html/body/div[3]/main/div[2]/div[3]/div[3]/div/div/div/div[2]/div/div[4]/div/div/div/div/div[2]/div/p')
+    data_students = body.find("div", class_="card statistic statistic-16723 position-relative h-100 text-align-center paragraph paragraph--type--statistic paragraph--view-mode--default")
+    data_employees = body.find("div", class_="card statistic statistic-16726 position-relative h-100 text-align-center paragraph paragraph--type--statistic paragraph--view-mode--default")
+
+    current_cases_students = int(data_students.find('p').text)
+    current_cases_employees = int(data_employees.find('p').text)
+
+    print(current_cases_students)
+    print(current_cases_employees)
 
 
-    casesStudents.append(current_cases_students.text)
-    casesEmployees.append(current_cases_employees.text)
-
-    for x in range(len(casesEmployees)):
-        print(casesEmployees[x])
+# only run this program if it is not being imported by another main module
+if __name__ == '__main__':
+    main()
