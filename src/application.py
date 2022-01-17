@@ -3,20 +3,72 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import os
-import csv
 import pandas
+import numpy
+import matplotlib.pyplot as plt
 
 URL = 'https://www.rit.edu/ready/spring-2022-dashboard'
-PATH = 'D:\PyCharm Projects\data-acquisition-rit-covid-dashboard\website_screenshots'
-DATA_PATH = 'D:\PyCharm Projects\data-acquisition-rit-covid-dashboard\data'
+PATH = 'website_screenshots'
+DATA_PATH = 'data'
+
+
+def create_graph():
+    df = pandas.read_csv(DATA_PATH + '\\' + 'covid_cases.csv')
+
+    x_axis = range(1, df['Students'].size + 1)
+
+    plt.plot(x_axis, df['Students'], 'b', label='Students',)
+    for x, y in zip(x_axis, df['Students']):
+        plt.annotate(y,
+                     (x, y),
+                     textcoords="offset points",
+                     xytext=(0, 10),
+                     ha='center')
+
+    plt.plot(x_axis, df['Employees'], 'r', label='Employees')
+    for x, y in zip(x_axis, df['Employees']):
+        plt.annotate(y,
+                     (x, y),
+                     textcoords="offset points",
+                     xytext=(0, 10),
+                     ha='center')
+
+    plt.plot(x_axis, df['Total'], 'g', label='Total')
+    for x, y in zip(x_axis, df['Total']):
+        plt.annotate(y,
+                     (x, y),
+                     textcoords="offset points",
+                     xytext=(0, 10),
+                     ha='center')
+
+    future_x_axis = range(1, len(x_axis) + 5)
+
+    z = numpy.polyfit(x_axis, df['Students'], 1)
+    p = numpy.poly1d(z)
+    plt.plot(future_x_axis, p(future_x_axis), 'b--')
+
+    z = numpy.polyfit(x_axis, df['Employees'], 1)
+    p = numpy.poly1d(z)
+    plt.plot(future_x_axis, p(future_x_axis), 'r--')
+
+    z = numpy.polyfit(x_axis, df['Total'], 1)
+    p = numpy.poly1d(z)
+    plt.plot(future_x_axis, p(future_x_axis), 'g--')
+
+    plt.title('Positive Covid Cases Over Spring Semester')
+    plt.xlabel('Days (since January 10th)')
+    plt.ylabel('Positive Covid Cases')
+    plt.grid(True)
+    plt.xticks(future_x_axis)
+    plt.legend()
+    plt.savefig(DATA_PATH + '\\' + 'covid_cases_graph.png', dpi=900)
 
 
 def save_data(students, employees):
-    df = pandas.read_csv(DATA_PATH + '\\' + 'covid_cases.csv')
-
     data = {
         'Students': [students],
-        'Employees': [employees]
+        'Employees': [employees],
+        'Total': [(students + employees)]
     }
 
     df = pandas.DataFrame(data)
@@ -61,12 +113,11 @@ def main() -> None:
     current_cases_students = int(data_students.find('p').text)
     current_cases_employees = int(data_employees.find('p').text)
 
-    print(current_cases_students)
-    print(current_cases_employees)
-
     save_screenshot(driver)
 
     save_data(current_cases_students, current_cases_employees)
+
+    create_graph()
 
     driver.close()
     driver.quit()
