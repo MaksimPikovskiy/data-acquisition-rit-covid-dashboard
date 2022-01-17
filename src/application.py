@@ -6,10 +6,14 @@ import pandas
 
 
 def main() -> None:
-
     s = Service(ChromeDriverManager().install())
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    options.add_argument('window-size=1920x1080')
+
     url = 'https://www.rit.edu/ready/spring-2022-dashboard'
-    driver = webdriver.Chrome(service=s)
+    driver = webdriver.Chrome(service=s, options=options)
     driver.get(url)
 
     content = driver.page_source
@@ -25,6 +29,9 @@ def main() -> None:
 
     print(current_cases_students)
     print(current_cases_employees)
+
+    driver.close()
+    driver.quit()
 
 
 # only run this program if it is not being imported by another main module
