@@ -10,6 +10,7 @@ import os
 import pandas
 import numpy
 import matplotlib.pyplot as plt
+import time
 
 __author__ = "Maksim Pikovskiy"
 __email__ = "pikmak2001@gmail.com"
@@ -122,6 +123,8 @@ def main() -> None:
 
     driver = webdriver.Chrome(service=s, options=options)
     driver.get(URL)
+
+    time.sleep(65)
 
     content = driver.page_source
 
