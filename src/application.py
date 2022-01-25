@@ -11,10 +11,11 @@ import pandas
 import numpy
 import matplotlib.pyplot as plt
 import time
+import sender
 
 __author__ = "Maksim Pikovskiy"
 __email__ = "pikmak2001@gmail.com"
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __copyright__ = "Copyright 2022"
 __status__ = "Production"
 
@@ -151,5 +152,7 @@ def main() -> None:
 
 
 # only run this program if it is not being imported by another main module
+# runs senders script to send the generated graph
 if __name__ == '__main__':
     main()
+    sender.main()
