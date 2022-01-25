@@ -120,6 +120,7 @@ def main() -> None:
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('window-size=1920x1080')
+    options.add_argument('--log-level=1')
 
     driver = webdriver.Chrome(service=s, options=options)
     driver.get(URL)
