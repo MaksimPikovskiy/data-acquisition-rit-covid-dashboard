@@ -33,9 +33,9 @@ def main() -> None:
     new_photo.save(save_path)
 
     send_photo = open(save_path, 'rb')
-    bot.send_photo(control, send_photo)
+    bot.send_photo(send_group, send_photo)
 
-    bot.send_message(control, message)
+    bot.send_message(send_group, message)
 
 
 # only run this program if it is not being imported by another main module

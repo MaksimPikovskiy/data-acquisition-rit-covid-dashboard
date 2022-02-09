@@ -19,7 +19,6 @@ __version__ = "2.0.0"
 __copyright__ = "Copyright 2022"
 __status__ = "Production"
 
-
 # General Variable for the Program
 URL = 'https://www.rit.edu/ready/spring-2022-dashboard'
 PATH = 'website_screenshots'
@@ -32,29 +31,41 @@ def create_graph():
 
     x_axis = range(1, df['Students'].size + 1)
 
-    plt.plot(x_axis, df['Students'], 'b', label='Students',)
+    plt.plot(x_axis, df['Students'], 'b', label='Students')
+    sizeStudents = df['Students'].size
+    i = 0
     for x, y in zip(x_axis, df['Students']):
-        plt.annotate(y,
-                     (x, y),
-                     textcoords="offset points",
-                     xytext=(0, 10),
-                     ha='center')
+        if i == sizeStudents - 1 or i == sizeStudents - 2:
+            plt.annotate(y,
+                         (x, y),
+                         textcoords="offset points",
+                         xytext=(0, 10),
+                         ha='center')
+        i += 1
 
     plt.plot(x_axis, df['Employees'], 'r', label='Employees')
+    sizeEmployees = df['Employees'].size
+    i = 0
     for x, y in zip(x_axis, df['Employees']):
-        plt.annotate(y,
-                     (x, y),
-                     textcoords="offset points",
-                     xytext=(0, 10),
-                     ha='center')
+        if i == sizeEmployees - 1 or i == sizeEmployees - 2:
+            plt.annotate(y,
+                         (x, y),
+                         textcoords="offset points",
+                         xytext=(0, 10),
+                         ha='center')
+        i += 1
 
     plt.plot(x_axis, df['Total'], 'g', label='Total')
+    sizeTotal = df['Total'].size
+    i = 0
     for x, y in zip(x_axis, df['Total']):
-        plt.annotate(y,
-                     (x, y),
-                     textcoords="offset points",
-                     xytext=(0, 10),
-                     ha='center')
+        if i == sizeTotal - 1 or i == sizeTotal - 2:
+            plt.annotate(y,
+                         (x, y),
+                         textcoords="offset points",
+                         xytext=(0, 10),
+                         ha='center')
+        i += 1
 
     future_x_axis = range(1, len(x_axis) + 5)
 
@@ -74,7 +85,7 @@ def create_graph():
     plt.xlabel('Days (since January 10th)')
     plt.ylabel('Positive Covid Cases')
     plt.grid(True)
-    plt.xticks(future_x_axis)
+    plt.xticks(numpy.arange(min(future_x_axis) + 1, max(future_x_axis) + 1, 2.0))
     plt.legend()
     plt.savefig(DATA_PATH + '\\' + 'covid_cases_graph.png', dpi=900)
 
